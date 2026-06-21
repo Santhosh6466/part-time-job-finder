@@ -21,7 +21,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             helper.setTo(toEmail);
-            helper.setSubject("Gigzy - OTP Verification");
+            helper.setSubject("JobSpot - OTP Verification");
 
             String htmlContent = """
                 <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -51,7 +51,7 @@ public class EmailService {
                     <br/>
                     
                     <p style="color: gray; font-size: 12px;">
-                        — Gigzy Team
+                        — JobSpot Team
                     </p>
                 </div>
             """;

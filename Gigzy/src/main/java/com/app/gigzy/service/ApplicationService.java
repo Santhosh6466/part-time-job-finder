@@ -73,4 +73,32 @@ public class ApplicationService {
 
         return applicationRepository.save(application);
     }
+
+    // ❌ CANCEL APPLICATION
+    public void cancelApplication(String applicationId, String seekerEmail) {
+
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new CustomException(
+                        "APPLICATION_NOT_FOUND",
+                        "Application not found"
+                ));
+
+        // 🔒 Only the seeker who applied can cancel
+        if (!application.getSeekerEmail().equals(seekerEmail)) {
+            throw new CustomException(
+                    "UNAUTHORIZED_ACCESS",
+                    "You are not allowed to cancel this application"
+            );
+        }
+
+        // ❌ Only pending applications can be cancelled
+        if (application.getStatus() != Status.PENDING) {
+            throw new CustomException(
+                    "APPLICATION_CANNOT_BE_CANCELLED",
+                    "Only pending applications can be cancelled"
+            );
+        }
+
+        applicationRepository.delete(application);
+    }
 }

@@ -16,7 +16,13 @@ public class ProviderProfileService {
     private ProviderProfileRepository repository;
 
     // 🔥 CREATE / UPDATE PROFILE
-    public ProviderProfile saveProfile(String email, ProviderProfileRequest request) {
+    // 🔥 CREATE / UPDATE PROFILE
+    public ProviderProfile saveProfile(
+            String email,
+            ProviderProfileRequest request,
+            String profileImageUrl,
+            String profileImagePublicId
+    ) {
 
         ProviderProfile profile = repository.findByEmail(email)
                 .orElse(new ProviderProfile());
@@ -26,6 +32,12 @@ public class ProviderProfileService {
         profile.setCompanyDescription(request.getCompanyDescription());
         profile.setLocation(request.getLocation());
         profile.setPhoneNumber(request.getPhoneNumber());
+
+        // Update image only if a new image is uploaded
+        if (profileImageUrl != null && !profileImageUrl.isBlank()) {
+            profile.setProfileImageUrl(profileImageUrl);
+            profile.setProfileImagePublicId(profileImagePublicId);
+        }
 
         if (profile.getCreatedAt() == null) {
             profile.setCreatedAt(LocalDateTime.now());
@@ -42,5 +54,20 @@ public class ProviderProfileService {
                         "PROFILE_NOT_FOUND",
                         "Provider profile not found"
                 ));
+    }
+
+    // 🏢 GET PROVIDER PROFILE BY EMAIL
+    public ProviderProfile getProfileByEmail(String email) {
+
+        return repository.findByEmail(email)
+                .orElseThrow(() ->
+                        new CustomException(
+                                "PROFILE_NOT_FOUND",
+                                "Provider profile not found"
+                        ));
+    }
+
+    public ProviderProfile save(ProviderProfile profile) {
+        return repository.save(profile);
     }
 }

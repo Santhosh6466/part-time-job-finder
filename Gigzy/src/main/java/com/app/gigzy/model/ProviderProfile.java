@@ -27,4 +27,9 @@ public class ProviderProfile {
     private String phoneNumber;
 
     private LocalDateTime createdAt;
+
+
+    private String profileImageUrl;
+
+    private String profileImagePublicId;
 }

@@ -16,7 +16,12 @@ public class SeekerProfileService {
     private SeekerProfileRepository repository;
 
     // 🔥 CREATE / UPDATE PROFILE
-    public SeekerProfile saveProfile(String email, SeekerProfileRequest request) {
+    public SeekerProfile saveProfile(
+            String email,
+            SeekerProfileRequest request,
+            String profileImageUrl,
+            String profileImagePublicId
+    ) {
 
         SeekerProfile profile = repository.findByEmail(email)
                 .orElse(new SeekerProfile());
@@ -28,6 +33,12 @@ public class SeekerProfileService {
         profile.setLocation(request.getLocation());
         profile.setBio(request.getBio());
         profile.setPhoneNumber(request.getPhoneNumber());
+
+        // Update image only if a new image is uploaded
+        if (profileImageUrl != null && !profileImageUrl.isBlank()) {
+            profile.setProfileImageUrl(profileImageUrl);
+            profile.setProfileImagePublicId(profileImagePublicId);
+        }
 
         if (profile.getCreatedAt() == null) {
             profile.setCreatedAt(LocalDateTime.now());
@@ -45,4 +56,20 @@ public class SeekerProfileService {
                         "Seeker profile not found"
                 ));
     }
+
+    // 🔥 GET PROFILE BY EMAIL
+    public SeekerProfile getProfileByEmail(String email) {
+
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(
+                        "PROFILE_NOT_FOUND",
+                        "Seeker profile not found"
+                ));
+    }
+
+    public SeekerProfile save(SeekerProfile profile) {
+        return repository.save(profile);
+    }
+
+
 }

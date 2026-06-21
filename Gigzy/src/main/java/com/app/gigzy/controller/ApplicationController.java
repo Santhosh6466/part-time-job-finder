@@ -47,4 +47,18 @@ public class ApplicationController {
 
         return applicationService.updateStatus(id, status);
     }
+
+    @DeleteMapping("/seeker/applications/{applicationId}")
+    public String cancelApplication(
+            @PathVariable String applicationId,
+            Principal principal
+    ) {
+
+        applicationService.cancelApplication(
+                applicationId,
+                principal.getName()
+        );
+
+        return "Application cancelled successfully";
+    }
 }

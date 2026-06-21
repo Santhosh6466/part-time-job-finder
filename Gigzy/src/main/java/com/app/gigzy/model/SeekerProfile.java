@@ -32,4 +32,9 @@ public class SeekerProfile {
     private String phoneNumber;
 
     private LocalDateTime createdAt;
+
+
+    private String profileImageUrl;
+
+    private String profileImagePublicId;
 }
